@@ -54,9 +54,9 @@ namespace MVCLatest {
 		System::Windows::Forms::Button^ btn_selectSource;
 		System::Windows::Forms::Button^ btn_selectDestination;
 		System::Windows::Forms::Button^ btn_runAlgorithm;
-		System::Windows::Forms::TextBox^ txt_errorOutput;
-		System::Windows::Forms::Button^ btn_SaveGraph;
-		System::Windows::Forms::Button^ btn_LoadGraph;
+		System::Windows::Forms::TextBox^ txt_messageOutput;
+		System::Windows::Forms::Button^ btn_saveGraph;
+		System::Windows::Forms::Button^ btn_loadGraph;
 
 		System::ComponentModel::Container^ components;
 
@@ -72,9 +72,9 @@ namespace MVCLatest {
 			this->btn_selectSource = (gcnew System::Windows::Forms::Button());
 			this->btn_selectDestination = (gcnew System::Windows::Forms::Button());
 			this->btn_runAlgorithm = (gcnew System::Windows::Forms::Button());
-			this->txt_errorOutput = (gcnew System::Windows::Forms::TextBox());
-			this->btn_SaveGraph = (gcnew System::Windows::Forms::Button());
-			this->btn_LoadGraph = (gcnew System::Windows::Forms::Button());
+			this->txt_messageOutput = (gcnew System::Windows::Forms::TextBox());
+			this->btn_saveGraph = (gcnew System::Windows::Forms::Button());
+			this->btn_loadGraph = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pic_nodeVisuals))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -82,12 +82,12 @@ namespace MVCLatest {
 			// 
 			this->btn_generateNodes->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btn_generateNodes->Location = System::Drawing::Point(1672, 1036);
-			this->btn_generateNodes->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->btn_generateNodes->MaximumSize = System::Drawing::Size(288, 50);
-			this->btn_generateNodes->MinimumSize = System::Drawing::Size(288, 50);
+			this->btn_generateNodes->Location = System::Drawing::Point(837, 541);
+			this->btn_generateNodes->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->btn_generateNodes->MaximumSize = System::Drawing::Size(144, 26);
+			this->btn_generateNodes->MinimumSize = System::Drawing::Size(144, 26);
 			this->btn_generateNodes->Name = L"btn_generateNodes";
-			this->btn_generateNodes->Size = System::Drawing::Size(288, 50);
+			this->btn_generateNodes->Size = System::Drawing::Size(144, 26);
 			this->btn_generateNodes->TabIndex = 0;
 			this->btn_generateNodes->Text = L"Generate Nodes";
 			this->btn_generateNodes->UseVisualStyleBackColor = true;
@@ -96,11 +96,11 @@ namespace MVCLatest {
 			// pic_nodeVisuals
 			// 
 			this->pic_nodeVisuals->BackColor = System::Drawing::SystemColors::ControlDark;
-			this->pic_nodeVisuals->Location = System::Drawing::Point(26, 26);
-			this->pic_nodeVisuals->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->pic_nodeVisuals->MinimumSize = System::Drawing::Size(1591, 924);
+			this->pic_nodeVisuals->Location = System::Drawing::Point(13, 14);
+			this->pic_nodeVisuals->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->pic_nodeVisuals->MinimumSize = System::Drawing::Size(796, 480);
 			this->pic_nodeVisuals->Name = L"pic_nodeVisuals";
-			this->pic_nodeVisuals->Size = System::Drawing::Size(1636, 1180);
+			this->pic_nodeVisuals->Size = System::Drawing::Size(818, 614);
 			this->pic_nodeVisuals->TabIndex = 1;
 			this->pic_nodeVisuals->TabStop = false;
 			this->pic_nodeVisuals->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &View::pic_nodeVisuals_MouseClick);
@@ -110,12 +110,12 @@ namespace MVCLatest {
 			this->btn_selectSource->Enabled = false;
 			this->btn_selectSource->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btn_selectSource->Location = System::Drawing::Point(1672, 1096);
-			this->btn_selectSource->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->btn_selectSource->MaximumSize = System::Drawing::Size(288, 50);
-			this->btn_selectSource->MinimumSize = System::Drawing::Size(288, 50);
+			this->btn_selectSource->Location = System::Drawing::Point(985, 541);
+			this->btn_selectSource->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->btn_selectSource->MaximumSize = System::Drawing::Size(144, 26);
+			this->btn_selectSource->MinimumSize = System::Drawing::Size(144, 26);
 			this->btn_selectSource->Name = L"btn_selectSource";
-			this->btn_selectSource->Size = System::Drawing::Size(288, 50);
+			this->btn_selectSource->Size = System::Drawing::Size(144, 26);
 			this->btn_selectSource->TabIndex = 2;
 			this->btn_selectSource->Text = L"Select Source";
 			this->btn_selectSource->UseVisualStyleBackColor = true;
@@ -126,12 +126,12 @@ namespace MVCLatest {
 			this->btn_selectDestination->Enabled = false;
 			this->btn_selectDestination->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->btn_selectDestination->Location = System::Drawing::Point(1969, 1096);
-			this->btn_selectDestination->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->btn_selectDestination->MaximumSize = System::Drawing::Size(288, 50);
-			this->btn_selectDestination->MinimumSize = System::Drawing::Size(288, 50);
+			this->btn_selectDestination->Location = System::Drawing::Point(837, 573);
+			this->btn_selectDestination->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->btn_selectDestination->MaximumSize = System::Drawing::Size(144, 26);
+			this->btn_selectDestination->MinimumSize = System::Drawing::Size(144, 26);
 			this->btn_selectDestination->Name = L"btn_selectDestination";
-			this->btn_selectDestination->Size = System::Drawing::Size(288, 50);
+			this->btn_selectDestination->Size = System::Drawing::Size(144, 26);
 			this->btn_selectDestination->TabIndex = 3;
 			this->btn_selectDestination->Text = L"Select Destination";
 			this->btn_selectDestination->UseVisualStyleBackColor = true;
@@ -142,12 +142,12 @@ namespace MVCLatest {
 			this->btn_runAlgorithm->Enabled = false;
 			this->btn_runAlgorithm->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btn_runAlgorithm->Location = System::Drawing::Point(1969, 1036);
-			this->btn_runAlgorithm->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->btn_runAlgorithm->MaximumSize = System::Drawing::Size(288, 50);
-			this->btn_runAlgorithm->MinimumSize = System::Drawing::Size(288, 50);
+			this->btn_runAlgorithm->Location = System::Drawing::Point(985, 573);
+			this->btn_runAlgorithm->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->btn_runAlgorithm->MaximumSize = System::Drawing::Size(144, 26);
+			this->btn_runAlgorithm->MinimumSize = System::Drawing::Size(144, 26);
 			this->btn_runAlgorithm->Name = L"btn_runAlgorithm";
-			this->btn_runAlgorithm->Size = System::Drawing::Size(288, 50);
+			this->btn_runAlgorithm->Size = System::Drawing::Size(144, 26);
 			this->btn_runAlgorithm->TabIndex = 7;
 			this->btn_runAlgorithm->Text = L"Run Algorithm";
 			this->btn_runAlgorithm->UseVisualStyleBackColor = true;
@@ -155,67 +155,67 @@ namespace MVCLatest {
 			// 
 			// txt_errorOutput
 			// 
-			this->txt_errorOutput->Location = System::Drawing::Point(1674, 26);
-			this->txt_errorOutput->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->txt_errorOutput->MaximumSize = System::Drawing::Size(582, 999);
-			this->txt_errorOutput->MinimumSize = System::Drawing::Size(582, 999);
-			this->txt_errorOutput->Multiline = true;
-			this->txt_errorOutput->Name = L"txt_errorOutput";
-			this->txt_errorOutput->ReadOnly = true;
-			this->txt_errorOutput->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->txt_errorOutput->Size = System::Drawing::Size(582, 999);
-			this->txt_errorOutput->TabIndex = 8;
+			this->txt_messageOutput->Location = System::Drawing::Point(837, 14);
+			this->txt_messageOutput->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->txt_messageOutput->MaximumSize = System::Drawing::Size(292, 521);
+			this->txt_messageOutput->MinimumSize = System::Drawing::Size(292, 521);
+			this->txt_messageOutput->Multiline = true;
+			this->txt_messageOutput->Name = L"txt_messageOutput";
+			this->txt_messageOutput->ReadOnly = true;
+			this->txt_messageOutput->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
+			this->txt_messageOutput->Size = System::Drawing::Size(292, 521);
+			this->txt_messageOutput->TabIndex = 8;
 			// 
 			// btn_SaveGraph
 			// 
-			this->btn_SaveGraph->Enabled = false;
-			this->btn_SaveGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btn_saveGraph->Enabled = false;
+			this->btn_saveGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btn_SaveGraph->Location = System::Drawing::Point(1672, 1158);
-			this->btn_SaveGraph->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->btn_SaveGraph->MaximumSize = System::Drawing::Size(288, 50);
-			this->btn_SaveGraph->MinimumSize = System::Drawing::Size(288, 50);
-			this->btn_SaveGraph->Name = L"btn_SaveGraph";
-			this->btn_SaveGraph->Size = System::Drawing::Size(288, 50);
-			this->btn_SaveGraph->TabIndex = 9;
-			this->btn_SaveGraph->Text = L"Save Graph";
-			this->btn_SaveGraph->UseVisualStyleBackColor = true;
+			this->btn_saveGraph->Location = System::Drawing::Point(837, 602);
+			this->btn_saveGraph->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->btn_saveGraph->MaximumSize = System::Drawing::Size(144, 26);
+			this->btn_saveGraph->MinimumSize = System::Drawing::Size(144, 26);
+			this->btn_saveGraph->Name = L"btn_saveGraph";
+			this->btn_saveGraph->Size = System::Drawing::Size(144, 26);
+			this->btn_saveGraph->TabIndex = 9;
+			this->btn_saveGraph->Text = L"Save Graph";
+			this->btn_saveGraph->UseVisualStyleBackColor = true;
 			// 
 			// btn_LoadGraph
 			// 
-			this->btn_LoadGraph->Enabled = false;
-			this->btn_LoadGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btn_loadGraph->Enabled = false;
+			this->btn_loadGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btn_LoadGraph->Location = System::Drawing::Point(1969, 1158);
-			this->btn_LoadGraph->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
-			this->btn_LoadGraph->MaximumSize = System::Drawing::Size(288, 50);
-			this->btn_LoadGraph->MinimumSize = System::Drawing::Size(288, 50);
-			this->btn_LoadGraph->Name = L"btn_LoadGraph";
-			this->btn_LoadGraph->Size = System::Drawing::Size(288, 50);
-			this->btn_LoadGraph->TabIndex = 10;
-			this->btn_LoadGraph->Text = L"Load Graph";
-			this->btn_LoadGraph->UseVisualStyleBackColor = true;
+			this->btn_loadGraph->Location = System::Drawing::Point(985, 602);
+			this->btn_loadGraph->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			this->btn_loadGraph->MaximumSize = System::Drawing::Size(144, 26);
+			this->btn_loadGraph->MinimumSize = System::Drawing::Size(144, 26);
+			this->btn_loadGraph->Name = L"btn_loadGraph";
+			this->btn_loadGraph->Size = System::Drawing::Size(144, 26);
+			this->btn_loadGraph->TabIndex = 10;
+			this->btn_loadGraph->Text = L"Load Graph";
+			this->btn_loadGraph->UseVisualStyleBackColor = true;
 			// 
 			// View
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaption;
-			this->ClientSize = System::Drawing::Size(2273, 1224);
-			this->Controls->Add(this->btn_LoadGraph);
-			this->Controls->Add(this->btn_SaveGraph);
-			this->Controls->Add(this->txt_errorOutput);
+			this->ClientSize = System::Drawing::Size(1142, 640);
+			this->Controls->Add(this->btn_loadGraph);
+			this->Controls->Add(this->btn_saveGraph);
+			this->Controls->Add(this->txt_messageOutput);
 			this->Controls->Add(this->btn_runAlgorithm);
 			this->Controls->Add(this->btn_selectDestination);
 			this->Controls->Add(this->btn_selectSource);
 			this->Controls->Add(this->btn_generateNodes);
 			this->Controls->Add(this->pic_nodeVisuals);
 			this->Location = System::Drawing::Point(102, 13);
-			this->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
 			this->MaximizeBox = false;
-			this->MaximumSize = System::Drawing::Size(2299, 1295);
+			this->MaximumSize = System::Drawing::Size(1158, 692);
 			this->MinimizeBox = false;
-			this->MinimumSize = System::Drawing::Size(2299, 1232);
+			this->MinimumSize = System::Drawing::Size(967, 558);
 			this->Name = L"View";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Computing the Shortest Path between Nodes";
@@ -263,7 +263,7 @@ namespace MVCLatest {
 			selectDestination(e->Location);
 			break;
 		case None:
-			txt_errorOutput->Text += "Error: Please select source node to begin";
+			txt_messageOutput->AppendText("Error: Please select source node to begin" + "\r\n");
 		}
 	}
 
@@ -283,30 +283,32 @@ namespace MVCLatest {
 		// Check srcNode and destNode not equal to -1 (uninitialised) and then run algorithm
 		if (srcNode != -1 && destNode != -1) {
 			dijkstra(model::graph, srcNode, destNode);
-			txt_errorOutput->Text += "\t Successfully ran dijkstra's";
+			txt_messageOutput->AppendText("Successfully ran dijkstra's" + "\r\n");
 			updateVisualisation();
 			//clearVariables();
-			std::cout << "Test output";
 		}
 		else {
-			txt_errorOutput->Text += "\t Couldn't run dijkstra's, src node or dest node not selected";
-			txt_errorOutput->Text += "\t SrcNode: " + srcNode + "\t DestNode: " + destNode;
+			txt_messageOutput->AppendText("Error: Failed to run dijkstra's. Please select source node or destination node first" + "\r\n");
+			txt_messageOutput->AppendText("Selected Source Node: " + srcNode + "\r\n" + "Selected Destination Node: " + destNode + "\r\n");
 		}
 	}
 
 	void addEdge(int u, int v) {
-		model::graph[u][v] = rand() % 100 + 1;
+		model::graph[u][v] = rand() % 100 + 1; // Add a random weight to the edge within the graph
 		model::graph[v][u] = model::graph[u][v];
 	}
 
 	void randomGenerator() {
+		// Clear the previous graph
+		clearGraph();
+
 		// Initialise rand value to current system time
 		srand(time(nullptr));
 
 		// Add random edges to the graph
 		for (int i = 0; i < model::MAX_NODES; i++) {
 			for (int j = 0; j < model::MAX_NODES; j++) {
-				if (i != j && rand() % 6 == 0) {
+				if (i != j && rand() % 25 == 0) {
 					addEdge(i, j);
 				}
 			}
@@ -316,8 +318,8 @@ namespace MVCLatest {
 	// Dijkstra's algorithm
 	void dijkstra(const std::vector<std::vector<int>> &graph, int srcNode, int destNode) {
 		std::vector<int> dist(model::MAX_NODES, INT_MAX);  // The output array. dist[i] will hold the shortest distance from src to i
-		std::vector<bool> visited(model::MAX_NODES, false); // visited[i] will be true if vertex i is included in shortest path tree or shortest distance from src to i is finalized.
-		std::vector<int> parent(model::MAX_NODES, -1); // parent array to store shortest path tree
+		std::vector<bool> visited(model::MAX_NODES, false); // Visited[i] will be true if vertex i is included in shortest path tree or shortest distance from src to i is finalised.
+		std::vector<int> parent(model::MAX_NODES, -1); // Parent array to store shortest path tree
 
 		dist[srcNode] = 0;
 
@@ -345,7 +347,7 @@ namespace MVCLatest {
 		}
 	}
 
-	// Function to find the vertex with the minimum distance value
+	// Helper Function for Dijkstras to find the vertex with the minimum distance value
 	int minimumDistance(const std::vector<int> &dist, const std::vector<bool> &visited) {
 		int min = INT_MAX, index = -1;
 
@@ -377,8 +379,8 @@ namespace MVCLatest {
 		g->DrawLine(pen, x1, y1, x2, y2);
 
 		// Draw weight of edge
-		PointF point = PointF((x1 + x2) / 2, (y1 + y2) / 2);
-		g->DrawString(weight.ToString(), gcnew Drawing::Font("Arial", fontSize), brush, point);
+		PointF point = PointF((x1 + x2) / 2, (y1 + y2) / 2); // Calculates the halfway point between the nodes to write the weight for the edge
+		g->DrawString(weight.ToString(), gcnew Drawing::Font("Arial", fontSize), brush, point); // Writes the weight of the edge at this point
 	}
 
 	// Function to draw the graph
@@ -406,13 +408,13 @@ namespace MVCLatest {
 	void selectSource(Point &clickLocation) {
 		// Selects Source Node
 		srcNode = searchNodePositionsForClickLocation(clickLocation);
-		txt_errorOutput->Text += "\t Source Node: " + srcNode;
+		txt_messageOutput->AppendText("Source Node Selected: " + srcNode + "\r\n");
 	}
 
 	void selectDestination(Point &clickLocation) {
 		// Selects Destination Node
 		destNode = searchNodePositionsForClickLocation(clickLocation);
-		txt_errorOutput->Text += "\t Dest Node: " + destNode;
+		txt_messageOutput->AppendText("Destination Node Selected: " + destNode + "\r\n");
 	}
 
 	int searchNodePositionsForClickLocation(Point %clickLocation) {
@@ -423,7 +425,7 @@ namespace MVCLatest {
 			if (clickLocation.X >= node.X - radius && clickLocation.X <= node.X + radius &&
 				clickLocation.Y >= node.Y - radius && clickLocation.Y <= node.Y + radius) {
 				// Click location is within the radius of the node, return the index
-				txt_errorOutput->Text += "\t Click location within node range. Index: " + i;
+				// txt_messageOutput->AppendText("Selected Node: " + i + "\r\n"); // Debugging message
 				return i;
 			}
 		}
@@ -436,7 +438,8 @@ namespace MVCLatest {
 	void updateVisualisation() {
 		// TODO: Update visualisation after dijkstra's algorithm runs
 		drawGraphWithShortestPath(model::graph, shortestPathEdges);
-		txt_errorOutput->Text += "\t Should have updated";
+		txt_messageOutput->AppendText("Shortest path calculated." + "\r\n");
+		txt_messageOutput->AppendText("Shortest path is:" + "\r\n");
 	}
 
 	void drawGraphWithShortestPath(const std::vector<std::vector<int>>& graph, List<Tuple<int, int>^>^ shortestPathEdges) {
@@ -459,7 +462,7 @@ namespace MVCLatest {
 							lineColor = Color::Green; // Change color to green if it's in the shortest path
 							textColor = Color::Green;
 							penWidth = 2.5;
-							fontSize = 12;
+							fontSize = 11;
 							break; // No need to continue checking once found
 						}
 					}
@@ -471,16 +474,19 @@ namespace MVCLatest {
 		}
 	}
 
+	void clearGraph() {
+		// Clear the existing graph
+		for (int i = 0; i < model::MAX_NODES; i++) {
+			for (int j = 0; j < model::MAX_NODES; j++) {
+				model::graph[i][j] = 0;
+				model::graph[j][i] = model::graph[i][j]; // TODO: Check if this is required
+			}
+		}
+	}
 
 	void clearVariables() {
-		// Clear vectors and release memory
-		//for (auto& innerVec : model::graph) {
-		//	// Check if innerVec is empty before clearing
-		//	if (!innerVec.empty()) {
-		//		innerVec.clear(); // Clear all values
-		//		//innerVec.shrink_to_fit(); // Release memory held by vector
-		//	}
-		//}
+		// Clear the graph for next running
+		clearGraph();
 
 		// Reset variables
 		srcNode = -1;

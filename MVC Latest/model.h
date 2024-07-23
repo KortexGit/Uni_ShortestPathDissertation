@@ -5,5 +5,5 @@
 class model {
 public:
 	static std::vector<std::vector<int>> graph;
-	static const int MAX_NODES = 30;
+	static const int MAX_NODES = 50;
 };
