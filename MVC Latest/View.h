@@ -35,9 +35,6 @@ namespace MVCLatest {
 		View(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 		}
 
 	protected:
@@ -51,23 +48,17 @@ namespace MVCLatest {
 				delete components;
 			}
 		}
-
-	private: System::Windows::Forms::Button^ btn_generateNodes;
-	private: System::Windows::Forms::PictureBox^ pic_nodeVisuals;
-	private: System::Windows::Forms::Button^ btn_selectSource;
-	private: System::Windows::Forms::Button^ btn_selectDestination;
-	private: System::Windows::Forms::CheckBox^ chk_demoMode;
-	private: System::Windows::Forms::Button^ btn_demoNext;
-	private: System::Windows::Forms::Button^ btn_demoPrev;
-	private: System::Windows::Forms::Button^ btn_runAlgorithm;
-	private: System::Windows::Forms::TextBox^ txt_errorOutput;
-	//private: System::Windows::Forms::TextBox^ txt_errorOutput;
-
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::Windows::Forms::Button^ btn_generateNodes;
+		System::Windows::Forms::PictureBox^ pic_nodeVisuals;
+		System::Windows::Forms::Button^ btn_selectSource;
+		System::Windows::Forms::Button^ btn_selectDestination;
+		System::Windows::Forms::Button^ btn_runAlgorithm;
+		System::Windows::Forms::TextBox^ txt_errorOutput;
+		System::Windows::Forms::Button^ btn_SaveGraph;
+		System::Windows::Forms::Button^ btn_LoadGraph;
+
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -80,20 +71,23 @@ namespace MVCLatest {
 			this->pic_nodeVisuals = (gcnew System::Windows::Forms::PictureBox());
 			this->btn_selectSource = (gcnew System::Windows::Forms::Button());
 			this->btn_selectDestination = (gcnew System::Windows::Forms::Button());
-			this->chk_demoMode = (gcnew System::Windows::Forms::CheckBox());
-			this->btn_demoNext = (gcnew System::Windows::Forms::Button());
-			this->btn_demoPrev = (gcnew System::Windows::Forms::Button());
 			this->btn_runAlgorithm = (gcnew System::Windows::Forms::Button());
 			this->txt_errorOutput = (gcnew System::Windows::Forms::TextBox());
+			this->btn_SaveGraph = (gcnew System::Windows::Forms::Button());
+			this->btn_LoadGraph = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pic_nodeVisuals))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// btn_generateNodes
 			// 
-			this->btn_generateNodes->Location = System::Drawing::Point(6, 441);
-			this->btn_generateNodes->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->btn_generateNodes->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btn_generateNodes->Location = System::Drawing::Point(1672, 1036);
+			this->btn_generateNodes->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->btn_generateNodes->MaximumSize = System::Drawing::Size(288, 50);
+			this->btn_generateNodes->MinimumSize = System::Drawing::Size(288, 50);
 			this->btn_generateNodes->Name = L"btn_generateNodes";
-			this->btn_generateNodes->Size = System::Drawing::Size(99, 28);
+			this->btn_generateNodes->Size = System::Drawing::Size(288, 50);
 			this->btn_generateNodes->TabIndex = 0;
 			this->btn_generateNodes->Text = L"Generate Nodes";
 			this->btn_generateNodes->UseVisualStyleBackColor = true;
@@ -101,10 +95,12 @@ namespace MVCLatest {
 			// 
 			// pic_nodeVisuals
 			// 
-			this->pic_nodeVisuals->Location = System::Drawing::Point(6, 7);
-			this->pic_nodeVisuals->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->pic_nodeVisuals->BackColor = System::Drawing::SystemColors::ControlDark;
+			this->pic_nodeVisuals->Location = System::Drawing::Point(26, 26);
+			this->pic_nodeVisuals->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->pic_nodeVisuals->MinimumSize = System::Drawing::Size(1591, 924);
 			this->pic_nodeVisuals->Name = L"pic_nodeVisuals";
-			this->pic_nodeVisuals->Size = System::Drawing::Size(934, 431);
+			this->pic_nodeVisuals->Size = System::Drawing::Size(1636, 1180);
 			this->pic_nodeVisuals->TabIndex = 1;
 			this->pic_nodeVisuals->TabStop = false;
 			this->pic_nodeVisuals->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &View::pic_nodeVisuals_MouseClick);
@@ -112,10 +108,14 @@ namespace MVCLatest {
 			// btn_selectSource
 			// 
 			this->btn_selectSource->Enabled = false;
-			this->btn_selectSource->Location = System::Drawing::Point(110, 441);
-			this->btn_selectSource->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->btn_selectSource->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btn_selectSource->Location = System::Drawing::Point(1672, 1096);
+			this->btn_selectSource->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->btn_selectSource->MaximumSize = System::Drawing::Size(288, 50);
+			this->btn_selectSource->MinimumSize = System::Drawing::Size(288, 50);
 			this->btn_selectSource->Name = L"btn_selectSource";
-			this->btn_selectSource->Size = System::Drawing::Size(90, 28);
+			this->btn_selectSource->Size = System::Drawing::Size(288, 50);
 			this->btn_selectSource->TabIndex = 2;
 			this->btn_selectSource->Text = L"Select Source";
 			this->btn_selectSource->UseVisualStyleBackColor = true;
@@ -124,59 +124,30 @@ namespace MVCLatest {
 			// btn_selectDestination
 			// 
 			this->btn_selectDestination->Enabled = false;
-			this->btn_selectDestination->Location = System::Drawing::Point(204, 441);
-			this->btn_selectDestination->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->btn_selectDestination->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->btn_selectDestination->Location = System::Drawing::Point(1969, 1096);
+			this->btn_selectDestination->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->btn_selectDestination->MaximumSize = System::Drawing::Size(288, 50);
+			this->btn_selectDestination->MinimumSize = System::Drawing::Size(288, 50);
 			this->btn_selectDestination->Name = L"btn_selectDestination";
-			this->btn_selectDestination->Size = System::Drawing::Size(106, 28);
+			this->btn_selectDestination->Size = System::Drawing::Size(288, 50);
 			this->btn_selectDestination->TabIndex = 3;
 			this->btn_selectDestination->Text = L"Select Destination";
 			this->btn_selectDestination->UseVisualStyleBackColor = true;
 			this->btn_selectDestination->Click += gcnew System::EventHandler(this, &View::btn_selectDestination_Click);
 			// 
-			// chk_demoMode
-			// 
-			this->chk_demoMode->AutoSize = true;
-			this->chk_demoMode->Enabled = false;
-			this->chk_demoMode->Location = System::Drawing::Point(408, 448);
-			this->chk_demoMode->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
-			this->chk_demoMode->Name = L"chk_demoMode";
-			this->chk_demoMode->Size = System::Drawing::Size(84, 17);
-			this->chk_demoMode->TabIndex = 4;
-			this->chk_demoMode->Text = L"Demo Mode";
-			this->chk_demoMode->UseVisualStyleBackColor = true;
-			this->chk_demoMode->CheckedChanged += gcnew System::EventHandler(this, &View::chk_demoMode_CheckedChanged);
-			// 
-			// btn_demoNext
-			// 
-			this->btn_demoNext->Enabled = false;
-			this->btn_demoNext->Location = System::Drawing::Point(496, 441);
-			this->btn_demoNext->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
-			this->btn_demoNext->Name = L"btn_demoNext";
-			this->btn_demoNext->Size = System::Drawing::Size(76, 28);
-			this->btn_demoNext->TabIndex = 5;
-			this->btn_demoNext->Text = L"Next Node";
-			this->btn_demoNext->UseVisualStyleBackColor = true;
-			this->btn_demoNext->Click += gcnew System::EventHandler(this, &View::btn_demoNext_Click);
-			// 
-			// btn_demoPrev
-			// 
-			this->btn_demoPrev->Enabled = false;
-			this->btn_demoPrev->Location = System::Drawing::Point(576, 441);
-			this->btn_demoPrev->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
-			this->btn_demoPrev->Name = L"btn_demoPrev";
-			this->btn_demoPrev->Size = System::Drawing::Size(70, 28);
-			this->btn_demoPrev->TabIndex = 6;
-			this->btn_demoPrev->Text = L"Prev Node";
-			this->btn_demoPrev->UseVisualStyleBackColor = true;
-			this->btn_demoPrev->Click += gcnew System::EventHandler(this, &View::btn_demoPrev_Click);
-			// 
 			// btn_runAlgorithm
 			// 
 			this->btn_runAlgorithm->Enabled = false;
-			this->btn_runAlgorithm->Location = System::Drawing::Point(314, 441);
-			this->btn_runAlgorithm->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->btn_runAlgorithm->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btn_runAlgorithm->Location = System::Drawing::Point(1969, 1036);
+			this->btn_runAlgorithm->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->btn_runAlgorithm->MaximumSize = System::Drawing::Size(288, 50);
+			this->btn_runAlgorithm->MinimumSize = System::Drawing::Size(288, 50);
 			this->btn_runAlgorithm->Name = L"btn_runAlgorithm";
-			this->btn_runAlgorithm->Size = System::Drawing::Size(90, 28);
+			this->btn_runAlgorithm->Size = System::Drawing::Size(288, 50);
 			this->btn_runAlgorithm->TabIndex = 7;
 			this->btn_runAlgorithm->Text = L"Run Algorithm";
 			this->btn_runAlgorithm->UseVisualStyleBackColor = true;
@@ -184,36 +155,70 @@ namespace MVCLatest {
 			// 
 			// txt_errorOutput
 			// 
-			this->txt_errorOutput->Location = System::Drawing::Point(6, 474);
-			this->txt_errorOutput->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->txt_errorOutput->Location = System::Drawing::Point(1674, 26);
+			this->txt_errorOutput->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->txt_errorOutput->MaximumSize = System::Drawing::Size(582, 999);
+			this->txt_errorOutput->MinimumSize = System::Drawing::Size(582, 999);
 			this->txt_errorOutput->Multiline = true;
 			this->txt_errorOutput->Name = L"txt_errorOutput";
 			this->txt_errorOutput->ReadOnly = true;
 			this->txt_errorOutput->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->txt_errorOutput->Size = System::Drawing::Size(936, 46);
+			this->txt_errorOutput->Size = System::Drawing::Size(582, 999);
 			this->txt_errorOutput->TabIndex = 8;
+			// 
+			// btn_SaveGraph
+			// 
+			this->btn_SaveGraph->Enabled = false;
+			this->btn_SaveGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btn_SaveGraph->Location = System::Drawing::Point(1672, 1158);
+			this->btn_SaveGraph->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->btn_SaveGraph->MaximumSize = System::Drawing::Size(288, 50);
+			this->btn_SaveGraph->MinimumSize = System::Drawing::Size(288, 50);
+			this->btn_SaveGraph->Name = L"btn_SaveGraph";
+			this->btn_SaveGraph->Size = System::Drawing::Size(288, 50);
+			this->btn_SaveGraph->TabIndex = 9;
+			this->btn_SaveGraph->Text = L"Save Graph";
+			this->btn_SaveGraph->UseVisualStyleBackColor = true;
+			// 
+			// btn_LoadGraph
+			// 
+			this->btn_LoadGraph->Enabled = false;
+			this->btn_LoadGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btn_LoadGraph->Location = System::Drawing::Point(1969, 1158);
+			this->btn_LoadGraph->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->btn_LoadGraph->MaximumSize = System::Drawing::Size(288, 50);
+			this->btn_LoadGraph->MinimumSize = System::Drawing::Size(288, 50);
+			this->btn_LoadGraph->Name = L"btn_LoadGraph";
+			this->btn_LoadGraph->Size = System::Drawing::Size(288, 50);
+			this->btn_LoadGraph->TabIndex = 10;
+			this->btn_LoadGraph->Text = L"Load Graph";
+			this->btn_LoadGraph->UseVisualStyleBackColor = true;
 			// 
 			// View
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ActiveCaption;
-			this->ClientSize = System::Drawing::Size(947, 525);
+			this->ClientSize = System::Drawing::Size(2273, 1224);
+			this->Controls->Add(this->btn_LoadGraph);
+			this->Controls->Add(this->btn_SaveGraph);
 			this->Controls->Add(this->txt_errorOutput);
 			this->Controls->Add(this->btn_runAlgorithm);
-			this->Controls->Add(this->btn_demoPrev);
-			this->Controls->Add(this->btn_demoNext);
-			this->Controls->Add(this->chk_demoMode);
 			this->Controls->Add(this->btn_selectDestination);
 			this->Controls->Add(this->btn_selectSource);
-			this->Controls->Add(this->pic_nodeVisuals);
 			this->Controls->Add(this->btn_generateNodes);
+			this->Controls->Add(this->pic_nodeVisuals);
 			this->Location = System::Drawing::Point(102, 13);
-			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
-			this->MaximumSize = System::Drawing::Size(968, 580);
-			this->MinimumSize = System::Drawing::Size(670, 440);
+			this->Margin = System::Windows::Forms::Padding(5, 5, 5, 5);
+			this->MaximizeBox = false;
+			this->MaximumSize = System::Drawing::Size(2299, 1295);
+			this->MinimizeBox = false;
+			this->MinimumSize = System::Drawing::Size(2299, 1232);
 			this->Name = L"View";
-			this->Text = L"View";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
+			this->Text = L"Computing the Shortest Path between Nodes";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pic_nodeVisuals))->EndInit();
 			this->ResumeLayout(false);
@@ -229,9 +234,6 @@ namespace MVCLatest {
 
 	private: static int srcNode = -1;
 	private: static int destNode = -1;
-
-	private: static bool demoMode = false;
-	private: static int currentStep = 0;
 
 	private: Void btn_generateNodes_Click(Object^ sender, EventArgs^ e) {
 		// Check if first time running or variables reset to run again
@@ -292,43 +294,7 @@ namespace MVCLatest {
 		}
 	}
 
-	private: Void chk_demoMode_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-		if (!chk_demoMode->Checked) {
-			demoMode = false;
-			btn_demoNext->Enabled = false;
-			btn_demoPrev->Enabled = false;
-		}
-		else {
-			demoMode = true;
-			btn_demoNext->Enabled = true;
-			btn_demoPrev->Enabled = true;
-		}
-	}
-
-	private: Void btn_demoNext_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (currentStep < model::MAX_NODES) {
-			currentStep++;
-			//dijkstra(model::graph, srcNode, destNode);
-			updateVisualisation();
-		}
-		else {
-			txt_errorOutput->Text += "\t Error: Can't exceed max number of nodes";
-		}
-	}
-
-	private: Void btn_demoPrev_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (currentStep > 0) {
-			currentStep--;
-			//dijkstra(model::graph, srcNode, destNode);
-			updateVisualisation();
-		}
-		else {
-			txt_errorOutput->Text += "\t Error: Can't go to previous nodes as current node is source node. Please press next and try again.";
-		}
-	}
-
 	void addEdge(int u, int v) {
-		// TODO: After running code will fail at this line, I'm guessing model::graph is uninitialised due to us clearing it previously (quick-fix implemented stop clearing model::graph after execution)
 		model::graph[u][v] = rand() % 100 + 1;
 		model::graph[v][u] = model::graph[u][v];
 	}
@@ -340,7 +306,7 @@ namespace MVCLatest {
 		// Add random edges to the graph
 		for (int i = 0; i < model::MAX_NODES; i++) {
 			for (int j = 0; j < model::MAX_NODES; j++) {
-				if (i != j && rand() % 4 == 0) {
+				if (i != j && rand() % 6 == 0) {
 					addEdge(i, j);
 				}
 			}
@@ -526,9 +492,6 @@ namespace MVCLatest {
 		//if (nodePositions != nullptr) delete nodePositions;
 		shortestPathEdges->Clear();
 		parent->Clear();
-
-		chk_demoMode->Checked = false;
-		std::cout << demoMode;
 
 		currentMode = SelectionMode::None;
 	}
