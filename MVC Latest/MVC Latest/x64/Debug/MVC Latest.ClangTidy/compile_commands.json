@@ -1,0 +1,17 @@
+[
+  {
+    "directory": "G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest",
+    "command": "\"C:\\Windows\\system32\\CL.exe\" \/c \/I\"C:\\src\\vcpkg\\vcpkg\\installed\\x64-windows\\include\" \/AI\"C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\\\\" \/AI\"C:\\Program Files (x86)\\Windows Kits\\10\\References\" \/AI\"C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\Facades\\\\\" \/Zi \/nologo \/W3 \/WX- \/diagnostics:column \/Od \/D CODE_ANALYSIS \/D _DEBUG \/D _UNICODE \/D UNICODE \/EHa \/MDd \/GS \/fp:precise \/Fo\"x64\\Debug\\\\\" \/TP  \/clr:nostdlib  \"G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest\\model.cpp\"",
+    "file": "G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest\\model.cpp"
+  },
+  {
+    "directory": "G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest",
+    "command": "\"C:\\Windows\\system32\\CL.exe\" \/c \/I\"C:\\src\\vcpkg\\vcpkg\\installed\\x64-windows\\include\" \/AI\"C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\\\\" \/AI\"C:\\Program Files (x86)\\Windows Kits\\10\\References\" \/AI\"C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\Facades\\\\\" \/Zi \/nologo \/W3 \/WX- \/diagnostics:column \/Od \/D CODE_ANALYSIS \/D _DEBUG \/D _UNICODE \/D UNICODE \/EHa \/MDd \/GS \/fp:precise \/Fo\"x64\\Debug\\\\\" \/TP  \/clr:nostdlib  \"G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest\\View.cpp\"",
+    "file": "G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest\\View.cpp"
+  },
+  {
+    "directory": "G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest",
+    "command": "\"C:\\Windows\\system32\\CL.exe\" \/c \/I\"C:\\src\\vcpkg\\vcpkg\\installed\\x64-windows\\include\" \/AI\"C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\\\\" \/AI\"C:\\Program Files (x86)\\Windows Kits\\10\\References\" \/AI\"C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\Facades\\\\\" \/Zi \/nologo \/W3 \/WX- \/diagnostics:column \/Od \/D CODE_ANALYSIS \/D _DEBUG \/D _UNICODE \/D UNICODE \/EHa \/MDd \/GS \/fp:precise \/Fo\"x64\\Debug\\\\\" \/TP  \/clr:nostdlib  \"G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest\\x64\\Debug\\.NETFramework,Version=v4.7.2.AssemblyAttributes.cpp\"",
+    "file": "G:\\OneDrive - University of South Wales\\Year 3\\Individual Project\\Project Code\\V2\\V2 Latest\\MVC Latest\\MVC Latest\\x64\\Debug\\.NETFramework,Version=v4.7.2.AssemblyAttributes.cpp"
+  }
+]

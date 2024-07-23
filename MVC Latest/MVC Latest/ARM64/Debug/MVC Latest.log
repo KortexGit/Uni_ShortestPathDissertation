@@ -1,0 +1,27 @@
+﻿  model.cpp
+  View.cpp
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(338,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  (compiling source file 'View.cpp')
+  
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(401,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'View.cpp')
+  
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(401,25): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'View.cpp')
+  
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(414,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'View.cpp')
+  
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(414,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'View.cpp')
+  
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(415,65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'View.cpp')
+  
+\\mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\MVC Latest\View.h(486,21): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'View.cpp')
+  
+  .NETFramework,Version=v4.7.2.AssemblyAttributes.cpp
+  Generating Code...
+  model.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  MVC Latest.vcxproj -> \\Mac\Home\Library\CloudStorage\OneDrive-UniversityofSouthWales\Year 3\Individual Project\Project Code\CS3D661_30019559_Connor_Moloney_Milestone_3\MVC Latest\ARM64\Debug\MVC Latest.exe

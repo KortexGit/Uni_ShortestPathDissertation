@@ -1,0 +1,69 @@
+Error while processing G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp.
+Error while processing G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\x64\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cpp.
+error: too many errors emitted, stopping now [clang-diagnostic-error]
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:13:18: error: expected namespace name [clang-diagnostic-error]
+        using namespace System;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:14:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::ComponentModel;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:15:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::Collections;
+                        ^
+Suppressed 12 warnings (12 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+Found compiler error(s).
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:16:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::Collections::Generic;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:17:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::Windows::Forms;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:18:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::Data;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:19:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::Drawing;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:20:18: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+        using namespace System::Text;
+                        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest/View.h:31:2: error: expected unqualified-id [clang-diagnostic-error]
+        public ref class View : public Form
+        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:3:17: error: expected namespace name [clang-diagnostic-error]
+using namespace System;
+                ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:4:17: error: use of undeclared identifier 'System' [clang-diagnostic-error]
+using namespace System::Windows::Forms;
+                ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:8:16: error: use of undeclared identifier 'String' [clang-diagnostic-error]
+int main(array<String^>^ args)
+               ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:8:23: error: expected expression [clang-diagnostic-error]
+int main(array<String^>^ args)
+                      ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:8:24: error: blocks support disabled - compile with -fblocks or pick a deployment target that supports them [clang-diagnostic-error]
+int main(array<String^>^ args)
+                       ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:8:26: error: block pointer to non-function type is invalid [clang-diagnostic-error]
+int main(array<String^>^ args)
+                         ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:10:2: error: use of undeclared identifier 'Application' [clang-diagnostic-error]
+        Application::EnableVisualStyles();
+        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:11:2: error: use of undeclared identifier 'Application' [clang-diagnostic-error]
+        Application::SetCompatibleTextRenderingDefault(false);
+        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:12:13: error: no type named 'View' in namespace 'MVCLatest' [clang-diagnostic-error]
+        MVCLatest::View view;
+                   ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\View.cpp:14:2: error: use of undeclared identifier 'Application' [clang-diagnostic-error]
+        Application::Run(% view);
+        ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\x64\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cpp:1:2: error: invalid preprocessing directive [clang-diagnostic-error]
+#using <mscorlib.dll>
+ ^
+G:\OneDrive - University of South Wales\Year 3\Individual Project\Project Code\V2\V2 Latest\MVC Latest\MVC Latest\x64\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cpp:2:145: warning: declaration does not declare anything [clang-diagnostic-missing-declarations]
+[assembly: System::Runtime::Versioning::TargetFrameworkAttribute(L".NETFramework,Version=v4.7.2", FrameworkDisplayName=L".NET Framework 4.7.2")];
+                                                                                                                                                ^
