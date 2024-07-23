@@ -8,6 +8,9 @@
 #include <cmath>
 #include "model.h"
 #include <iostream>
+#include <fstream>
+#include <utility>
+#include <msclr/marshal_cppstd.h>
 
 namespace MVCLatest {
 
@@ -107,7 +110,6 @@ namespace MVCLatest {
 			// 
 			// btn_selectSource
 			// 
-			this->btn_selectSource->Enabled = false;
 			this->btn_selectSource->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->btn_selectSource->Location = System::Drawing::Point(985, 541);
@@ -123,7 +125,6 @@ namespace MVCLatest {
 			// 
 			// btn_selectDestination
 			// 
-			this->btn_selectDestination->Enabled = false;
 			this->btn_selectDestination->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->btn_selectDestination->Location = System::Drawing::Point(837, 573);
@@ -139,7 +140,6 @@ namespace MVCLatest {
 			// 
 			// btn_runAlgorithm
 			// 
-			this->btn_runAlgorithm->Enabled = false;
 			this->btn_runAlgorithm->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->btn_runAlgorithm->Location = System::Drawing::Point(985, 573);
@@ -153,7 +153,7 @@ namespace MVCLatest {
 			this->btn_runAlgorithm->UseVisualStyleBackColor = true;
 			this->btn_runAlgorithm->Click += gcnew System::EventHandler(this, &View::btn_runAlgorithm_Click);
 			// 
-			// txt_errorOutput
+			// txt_messageOutput
 			// 
 			this->txt_messageOutput->Location = System::Drawing::Point(837, 14);
 			this->txt_messageOutput->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
@@ -166,9 +166,8 @@ namespace MVCLatest {
 			this->txt_messageOutput->Size = System::Drawing::Size(292, 521);
 			this->txt_messageOutput->TabIndex = 8;
 			// 
-			// btn_SaveGraph
+			// btn_saveGraph
 			// 
-			this->btn_saveGraph->Enabled = false;
 			this->btn_saveGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->btn_saveGraph->Location = System::Drawing::Point(837, 602);
@@ -180,10 +179,10 @@ namespace MVCLatest {
 			this->btn_saveGraph->TabIndex = 9;
 			this->btn_saveGraph->Text = L"Save Graph";
 			this->btn_saveGraph->UseVisualStyleBackColor = true;
+			this->btn_saveGraph->Click += gcnew System::EventHandler(this, &View::btn_saveGraph_Click);
 			// 
-			// btn_LoadGraph
+			// btn_loadGraph
 			// 
-			this->btn_loadGraph->Enabled = false;
 			this->btn_loadGraph->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->btn_loadGraph->Location = System::Drawing::Point(985, 602);
@@ -195,6 +194,7 @@ namespace MVCLatest {
 			this->btn_loadGraph->TabIndex = 10;
 			this->btn_loadGraph->Text = L"Load Graph";
 			this->btn_loadGraph->UseVisualStyleBackColor = true;
+			this->btn_loadGraph->Click += gcnew System::EventHandler(this, &View::btn_loadGraph_Click);
 			// 
 			// View
 			// 
@@ -213,9 +213,9 @@ namespace MVCLatest {
 			this->Location = System::Drawing::Point(102, 13);
 			this->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
 			this->MaximizeBox = false;
-			this->MaximumSize = System::Drawing::Size(1158, 692);
+			this->MaximumSize = System::Drawing::Size(1158, 679);
 			this->MinimizeBox = false;
-			this->MinimumSize = System::Drawing::Size(967, 558);
+			this->MinimumSize = System::Drawing::Size(1158, 679);
 			this->Name = L"View";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Computing the Shortest Path between Nodes";
@@ -226,94 +226,118 @@ namespace MVCLatest {
 
 		}
 #pragma endregion
-	private: static const int radius = 20;
-	private: SelectionMode currentMode = SelectionMode::None;
-	private: static List<Point>^ nodePositions = gcnew List<Point>(/*model::MAX_NODES*/);
-	private: static List<Tuple<int, int>^>^ shortestPathEdges = gcnew List<Tuple<int, int>^>(/*model::MAX_NODES*/);
-	private: static List<int>^ parent = gcnew List<int>(/*model::MAX_NODES*/);
+	private: 
+		static const int radius = 20;
+		SelectionMode currentMode = SelectionMode::None;
+		static List<Point>^ nodePositions = gcnew List<Point>(/*model::MAX_NODES*/); // TODO: Move to model?
+		static List<Tuple<int, int>^>^ shortestPathEdges = gcnew List<Tuple<int, int>^>(/*model::MAX_NODES*/); // TODO: Move to model?
+		static List<int>^ parent = gcnew List<int>(/*model::MAX_NODES*/); // TODO: Move to model?
 
-	private: static int srcNode = -1;
-	private: static int destNode = -1;
+		static int srcNode = -1;
+		static int destNode = -1;
 
-	private: Void btn_generateNodes_Click(Object^ sender, EventArgs^ e) {
-		// Check if first time running or variables reset to run again
-		if (srcNode != -1 && destNode != -1) {
-			clearVariables();
+		Void btn_generateNodes_Click(Object^ sender, EventArgs^ e) {
+			// Check if first time running or variables reset to run again
+			if (srcNode != -1 && destNode != -1) {
+				resetVariables();
+			}
+			else {
+				randomGenerator();
+
+				// Clear previous drawing
+				clearDisplay();
+
+				// Draw the graph
+				drawGraph(model::graph);
+
+				// Enable selectSource button for next step
+				btn_selectSource->Enabled = true;
+			}
 		}
-		else {
-			randomGenerator();
 
-			// Clear previous drawing
-			pic_nodeVisuals->CreateGraphics()->Clear(SystemColors::Control);
-
-			// Draw the graph
-			drawGraph(model::graph);
-
-			// Enable selectSource button for next step
-			btn_selectSource->Enabled = true;
+		Void pic_nodeVisuals_MouseClick(Object^ sender, Windows::Forms::MouseEventArgs^ e) { // TODO: Update this to offer left click right click selecting of nodes
+			switch (currentMode) {
+			case SelectSource:
+				selectSource(e->Location);
+				break;
+			case SelectDestination:
+				selectDestination(e->Location);
+				break;
+			case None:
+				txt_messageOutput->AppendText("Error: Please select source node to begin" + "\r\n");
+			}
 		}
-	}
 
-	private: Void pic_nodeVisuals_MouseClick(Object^ sender, Windows::Forms::MouseEventArgs^ e) {
-		switch (currentMode) {
-		case SelectSource:
-			selectSource(e->Location);
-			break;
-		case SelectDestination:
-			selectDestination(e->Location);
-			break;
-		case None:
-			txt_messageOutput->AppendText("Error: Please select source node to begin" + "\r\n");
+		Void btn_selectSource_Click(Object^ sender, EventArgs^ e) {
+			currentMode = SelectSource;
+			btn_selectSource->Enabled = false;
+			btn_selectDestination->Enabled = true;
 		}
-	}
 
-	private: Void btn_selectSource_Click(Object^ sender, EventArgs^ e) {
-		currentMode = SelectSource;
-		btn_selectSource->Enabled = false;
-		btn_selectDestination->Enabled = true;
-	}
-
-	private: Void btn_selectDestination_Click(Object^ sender, EventArgs^ e) {
-		currentMode = SelectDestination;
-		btn_selectDestination->Enabled = false;
-		btn_runAlgorithm->Enabled = true;
-	}
-
-	private: Void btn_runAlgorithm_Click(Object^ sender, EventArgs^ e) {
-		// Check srcNode and destNode not equal to -1 (uninitialised) and then run algorithm
-		if (srcNode != -1 && destNode != -1) {
-			dijkstra(model::graph, srcNode, destNode);
-			txt_messageOutput->AppendText("Successfully ran dijkstra's" + "\r\n");
-			updateVisualisation();
-			//clearVariables();
+		Void btn_selectDestination_Click(Object^ sender, EventArgs^ e) {
+			currentMode = SelectDestination;
+			btn_selectDestination->Enabled = false;
+			btn_runAlgorithm->Enabled = true;
 		}
-		else {
-			txt_messageOutput->AppendText("Error: Failed to run dijkstra's. Please select source node or destination node first" + "\r\n");
-			txt_messageOutput->AppendText("Selected Source Node: " + srcNode + "\r\n" + "Selected Destination Node: " + destNode + "\r\n");
+
+		Void btn_runAlgorithm_Click(Object^ sender, EventArgs^ e) {
+			// Check srcNode and destNode not equal to -1 (uninitialised) and then run algorithm
+			if (srcNode != -1 && destNode != -1) {
+				dijkstra(model::graph, srcNode, destNode);
+				txt_messageOutput->AppendText("Successfully ran dijkstra's" + "\r\n");
+				updateVisualisation();
+				//clearVariables();
+			}
+			else {
+				txt_messageOutput->AppendText("Error: Failed to run dijkstra's. Please select source node or destination node first" + "\r\n");
+				txt_messageOutput->AppendText("Selected Source Node: " + srcNode + "\r\n");
+				txt_messageOutput->AppendText("Selected Destination Node: " + destNode + "\r\n");
+			}
 		}
-	}
 
-		   void addEdge(int u, int v) {
-			   model::graph[u][v] = rand() % 100 + 1; // Add a random weight to the edge within the graph
-			   model::graph[v][u] = model::graph[u][v];
-		   }
+		Void btn_saveGraph_Click(System::Object^ sender, System::EventArgs^ e) {
+			SaveFileDialog^ saveFileDialog = gcnew SaveFileDialog();
+			saveFileDialog->Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+			saveFileDialog->FilterIndex = 1;
+			saveFileDialog->RestoreDirectory = true;
 
-		   void randomGenerator() {
-			   // Clear the previous graph
-			   clearGraph();
+			if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+				saveGraphToFile(saveFileDialog->FileName);
+			}
+		}
 
-			   // Initialise rand value to current system time
-			   srand(time(nullptr));
+		Void btn_loadGraph_Click(System::Object^ sender, System::EventArgs^ e) {
+			OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
+			openFileDialog->Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+			openFileDialog->FilterIndex = 1;
+			openFileDialog->RestoreDirectory = true;
 
-			   // Add random edges to the graph
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   for (int j = 0; j < model::MAX_NODES; j++) {
-					   if (i != j && rand() % 25 == 0) {
-						   addEdge(i, j);
-					   }
-				   }
-			   }
-		   }
+			if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+				loadGraphFromFile(openFileDialog->FileName);
+			}
+		}
+
+		void addEdge(int u, int v) {
+			model::graph[u][v] = rand() % 100 + 1; // Add a random weight to the edge within the graph
+			model::graph[v][u] = model::graph[u][v];
+		}
+
+		void randomGenerator() {
+			// Clear the previous graph
+			clearGraph();
+
+			// Initialise rand value to current system time
+			srand(time(nullptr));
+
+			// Add random edges to the graph
+			for (int i = 0; i < model::MAX_NODES; i++) {
+				for (int j = 0; j < model::MAX_NODES; j++) {
+					if (i != j && rand() % 25 == 0) {
+						addEdge(i, j);
+					}
+				}
+			}
+		}
 
 		   // Dijkstra's algorithm
 		   void dijkstra(const std::vector<std::vector<int>>& graph, int srcNode, int destNode) {
@@ -484,7 +508,12 @@ namespace MVCLatest {
 			   }
 		   }
 
-		   void clearVariables() {
+		   void clearDisplay() {
+			   Graphics^ g = pic_nodeVisuals->CreateGraphics();
+			   g->Clear(pic_nodeVisuals->BackColor);
+		   }
+
+		   void resetVariables() {
 			   // Clear the graph for next running
 			   clearGraph();
 
@@ -501,5 +530,94 @@ namespace MVCLatest {
 
 			   currentMode = SelectionMode::None;
 		   }
-	};
+
+		   void saveGraphToFile(String^ filePath) {
+			   std::ofstream outFile(msclr::interop::marshal_as<std::string>(filePath));
+			   if (!outFile.is_open()) {
+				   txt_messageOutput->AppendText("Error: Unable to open file for writing.\r\n");
+				   return;
+			   }
+
+			   // Save number of nodes
+			   outFile << model::MAX_NODES << "\n";
+
+			   // Save node positions with their indices
+			   for (int i = 0; i < nodePositions->Count; i++) {
+				   Point node = nodePositions[i];
+				   outFile << i << " " << node.X << " " << node.Y << "\n";
+			   }
+
+			   // Save graph edges and weights
+			   for (int i = 0; i < model::MAX_NODES; ++i) {
+				   for (int j = i + 1; j < model::MAX_NODES; ++j) {
+					   if (model::graph[i][j] > 0) {
+						   outFile << i << " " << j << " " << model::graph[i][j] << "\n";
+					   }
+				   }
+			   }
+
+			   outFile.close();
+			   txt_messageOutput->AppendText("Graph saved successfully.\r\n");
+		   }
+
+		   void loadGraphFromFile(String^ filePath) {
+			   std::ifstream inFile(msclr::interop::marshal_as<std::string>(filePath));
+			   if (!inFile.is_open()) {
+				   txt_messageOutput->AppendText("Error: Unable to open file for reading.\r\n");
+				   return;
+			   }
+
+			   // Clear existing graph and node positions
+			   clearGraph();
+			   nodePositions->Clear();
+
+			   // Clear the screen
+			   clearDisplay();
+
+			   // Read number of nodes
+			   int numNodes;
+			   inFile >> numNodes;
+			   if (numNodes != model::MAX_NODES) {
+				   txt_messageOutput->AppendText("Error: Number of nodes in file does not match MAX_NODES.\r\n");
+				   return;
+			   }
+
+			   // Load node positions
+			   for (int i = 0; i < numNodes; i++) {
+				   int index, x, y;
+				   if (!(inFile >> index >> x >> y) || index != i) {
+					   txt_messageOutput->AppendText("Error: Invalid node data in file.\r\n");
+					   return;
+				   }
+				   nodePositions->Add(Point(x, y));
+				   drawNode(x, y, i);
+			   }
+
+			   // Load graph edges and weights
+			   int u, v, weight;
+			   while (inFile >> u >> v >> weight) {
+				   if (u < 0 || u >= numNodes || v < 0 || v >= numNodes) {
+					   txt_messageOutput->AppendText("Error: Invalid node index in file.\r\n");
+					   continue;
+				   }
+				   model::graph[u][v] = weight;
+				   model::graph[v][u] = weight; // For undirected graph
+
+				   // Draw the edge
+				   drawEdge(nodePositions[u].X, nodePositions[u].Y,
+					   nodePositions[v].X, nodePositions[v].Y,
+					   Color::Black, Color::Red, 1.5f, 10, weight);
+			   }
+
+			   inFile.close();
+
+			   // Reset selection variables
+			   srcNode = -1;
+			   destNode = -1;
+			   currentMode = SelectionMode::None;
+			   shortestPathEdges->Clear();
+
+			   txt_messageOutput->AppendText("Graph loaded successfully.\r\n");
+		   }
+};
 }
