@@ -6,11 +6,14 @@
 #include <climits>
 #include <Windows.h>
 #include <cmath>
-#include "model.h"
 #include <iostream>
 #include <fstream>
 #include <utility>
-#include <msclr/marshal_cppstd.h>
+//#include <msclr/marshal_cppstd.h>
+
+#include "Model.h"
+#include "DrawingHelper.h"
+#include "GraphManager.h"
 
 namespace MVCLatest {
 
@@ -227,30 +230,21 @@ namespace MVCLatest {
 		}
 #pragma endregion
 	private: 
-		static const int radius = 20;
 		SelectionMode currentMode = SelectionMode::None;
-		static List<Point>^ nodePositions = gcnew List<Point>(/*model::MAX_NODES*/); // TODO: Move to model?
-		static List<Tuple<int, int>^>^ shortestPathEdges = gcnew List<Tuple<int, int>^>(/*model::MAX_NODES*/); // TODO: Move to model?
-		static List<int>^ parent = gcnew List<int>(/*model::MAX_NODES*/); // TODO: Move to model?
+		static List<Tuple<int, int>^>^ shortestPathEdges = gcnew List<Tuple<int, int>^>();
+		static List<int>^ parent = gcnew List<int>();
 
 		static int srcNode = -1;
 		static int destNode = -1;
 
-		Void btn_generateNodes_Click(Object^ sender, EventArgs^ e) {
-			// Check if first time running or variables reset to run again
+		Void btn_generateNodes_Click(System::Object^ sender, System::EventArgs^ e) {
 			if (srcNode != -1 && destNode != -1) {
 				resetVariables();
 			}
 			else {
-				randomGenerator();
-
-				// Clear previous drawing
-				clearDisplay();
-
-				// Draw the graph
-				drawGraph(model::graph);
-
-				// Enable selectSource button for next step
+				GraphManager::RandomGenerator(pic_nodeVisuals->Width, pic_nodeVisuals->Height);
+				DrawingHelper::ClearDisplay(pic_nodeVisuals->CreateGraphics(), pic_nodeVisuals);
+				DrawingHelper::DrawGraph(pic_nodeVisuals->CreateGraphics(), Model::graph, GraphManager::GetNodePositions(), DrawingHelper::radius);
 				btn_selectSource->Enabled = true;
 			}
 		}
@@ -283,7 +277,7 @@ namespace MVCLatest {
 		Void btn_runAlgorithm_Click(Object^ sender, EventArgs^ e) {
 			// Check srcNode and destNode not equal to -1 (uninitialised) and then run algorithm
 			if (srcNode != -1 && destNode != -1) {
-				dijkstra(model::graph, srcNode, destNode);
+				dijkstra(Model::graph, srcNode, destNode);
 				txt_messageOutput->AppendText("Successfully ran dijkstra's" + "\r\n");
 				updateVisualisation();
 				//clearVariables();
@@ -300,9 +294,9 @@ namespace MVCLatest {
 			saveFileDialog->Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 			saveFileDialog->FilterIndex = 1;
 			saveFileDialog->RestoreDirectory = true;
-
 			if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-				saveGraphToFile(saveFileDialog->FileName);
+				GraphManager::SaveGraphToFile(saveFileDialog->FileName, GraphManager::GetNodePositions());
+				txt_messageOutput->AppendText("Graph saved successfully.\r\n");
 			}
 		}
 
@@ -311,313 +305,136 @@ namespace MVCLatest {
 			openFileDialog->Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 			openFileDialog->FilterIndex = 1;
 			openFileDialog->RestoreDirectory = true;
-
 			if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-				loadGraphFromFile(openFileDialog->FileName);
+				GraphManager::LoadGraphFromFile(openFileDialog->FileName, GraphManager::GetNodePositions(), pic_nodeVisuals->CreateGraphics(), pic_nodeVisuals, DrawingHelper::radius);
+				txt_messageOutput->AppendText("Graph loaded successfully.\r\n");
 			}
 		}
 
-		void addEdge(int u, int v) {
-			model::graph[u][v] = rand() % 100 + 1; // Add a random weight to the edge within the graph
-			model::graph[v][u] = model::graph[u][v];
+		// Dijkstra's algorithm
+		void dijkstra(const std::vector<std::vector<int>>& graph, int srcNode, int destNode) {
+			std::vector<int> dist(Model::MAX_NODES, INT_MAX);  // The output array. dist[i] will hold the shortest distance from src to i
+			std::vector<bool> visited(Model::MAX_NODES, false); // Visited[i] will be true if vertex i is included in shortest path tree or shortest distance from src to i is finalised.
+			std::vector<int> parent(Model::MAX_NODES, -1); // Parent array to store shortest path tree
+
+			dist[srcNode] = 0;
+
+			for (int loop = 0; loop < Model::MAX_NODES; loop++) {
+				int minDist = minimumDistance(dist, visited);
+				visited[minDist] = true;
+				for (int index = 0; index < Model::MAX_NODES; index++) {
+					if (!visited[index] && Model::graph[minDist][index] && dist[minDist] != INT_MAX && dist[minDist] + Model::graph[minDist][index] < dist[index]) {
+						parent[index] = minDist;
+						dist[index] = dist[minDist] + Model::graph[minDist][index];
+					}
+				}
+			}
+
+			// After the algorithm runs, store the edges of the shortest path
+			if (srcNode != destNode) {
+				int current = destNode;
+				while (current != srcNode) {
+					int prev = parent[current];
+					shortestPathEdges->Add(Tuple::Create(prev, current));
+
+					current = prev;
+				}
+				shortestPathEdges->Reverse();
+			}
 		}
 
-		void randomGenerator() {
-			// Clear the previous graph
-			clearGraph();
+		// Helper Function for Dijkstras to find the vertex with the minimum distance value
+		int minimumDistance(const std::vector<int>& dist, const std::vector<bool>& visited) {
+			int min = INT_MAX, index = -1;
 
-			// Initialise rand value to current system time
-			srand(time(nullptr));
+			for (int i = 0; i < Model::MAX_NODES; i++) {
+				if (!visited[i] && dist[i] <= min) {
+					min = dist[i];
+					index = i;
+				}
+			}
+			return index;
+		}
 
-			// Add random edges to the graph
-			for (int i = 0; i < model::MAX_NODES; i++) {
-				for (int j = 0; j < model::MAX_NODES; j++) {
-					if (i != j && rand() % 25 == 0) {
-						addEdge(i, j);
+		void selectSource(Point& clickLocation) {
+			// Selects Source Node
+			srcNode = searchNodePositionsForClickLocation(clickLocation);
+			txt_messageOutput->AppendText("Source Node Selected: " + srcNode + "\r\n");
+		}
+
+		void selectDestination(Point& clickLocation) {
+			// Selects Destination Node
+			destNode = searchNodePositionsForClickLocation(clickLocation);
+			txt_messageOutput->AppendText("Destination Node Selected: " + destNode + "\r\n");
+		}
+
+		int searchNodePositionsForClickLocation(Point% clickLocation) {
+			for (int i = 0; i < Model::MAX_NODES; i++) {
+				Point node(GraphManager::GetNodePositionIndex(i).X, GraphManager::GetNodePositionIndex(i).Y);
+
+				// Assuming a circular node with a radius of 20 pixels
+				if (clickLocation.X >= node.X - DrawingHelper::radius && clickLocation.X <= node.X + DrawingHelper::radius &&
+					clickLocation.Y >= node.Y - DrawingHelper::radius && clickLocation.Y <= node.Y + DrawingHelper::radius) {
+					// Click location is within the radius of the node, return the index
+					// txt_messageOutput->AppendText("Selected Node: " + i + "\r\n"); // Debugging message
+					return i;
+				}
+			}
+
+			// Click location not found within any node
+			// TODO: Error message if node not found within click radius
+			return -1;
+		}
+
+		void updateVisualisation() {
+			// TODO: Update visualisation after dijkstra's algorithm runs
+			drawGraphWithShortestPath(Model::graph, shortestPathEdges);
+			txt_messageOutput->AppendText("Shortest path calculated." + "\r\n");
+			txt_messageOutput->AppendText("Shortest path is:" + "\r\n");
+		}
+
+		void drawGraphWithShortestPath(const std::vector<std::vector<int>>& graph, List<Tuple<int, int>^>^ shortestPathEdges) {
+			// Draw Edges
+			for (int i = 0; i < Model::MAX_NODES; i++) {
+				for (int j = i + 1; j < Model::MAX_NODES; j++) {  // Draw only one side of the symmetric graph
+					if (graph[i][j]) {
+						// Determine the color based on whether the edge belongs to the shortest path
+						Color lineColor = Color::Black; // Default color is black
+						Color textColor = Color::Red;
+						double penWidth = 1.3;
+						int fontSize = 10;
+						String^ weightText = System::Convert::ToString(graph[i][j]);
+
+						// Check if the current edge is in the shortest path
+						for each (Tuple<int, int> ^ edge in shortestPathEdges) {
+							if ((edge->Item1 == i && edge->Item2 == j) || (edge->Item1 == j && edge->Item2 == i)) {
+								lineColor = Color::Green; // Change color to green if it's in the shortest path
+								textColor = Color::Green;
+								penWidth = 2.5;
+								fontSize = 11;
+								break; // No need to continue checking once found
+							}
+						}
+						// TODO: Clear the page before reprinting because there are currently duplicate numbers in different colors
+						// Draw edge with correct color and weight
+						DrawingHelper::DrawEdge(pic_nodeVisuals->CreateGraphics(), GraphManager::GetNodePositionIndex(i).X, GraphManager::GetNodePositionIndex(i).Y, GraphManager::GetNodePositionIndex(j).X, GraphManager::GetNodePositionIndex(j).Y, lineColor, textColor, penWidth, fontSize, graph[i][j]);
 					}
 				}
 			}
 		}
 
-		   // Dijkstra's algorithm
-		   void dijkstra(const std::vector<std::vector<int>>& graph, int srcNode, int destNode) {
-			   std::vector<int> dist(model::MAX_NODES, INT_MAX);  // The output array. dist[i] will hold the shortest distance from src to i
-			   std::vector<bool> visited(model::MAX_NODES, false); // Visited[i] will be true if vertex i is included in shortest path tree or shortest distance from src to i is finalised.
-			   std::vector<int> parent(model::MAX_NODES, -1); // Parent array to store shortest path tree
+		void resetVariables() {
+			// Clear the graph for next running
+			GraphManager::ClearGraph();
 
-			   dist[srcNode] = 0;
+			// Reset variables
+			srcNode = -1;
+			destNode = -1;
 
-			   for (int loop = 0; loop < model::MAX_NODES; loop++) {
-				   int minDist = minimumDistance(dist, visited);
-				   visited[minDist] = true;
-				   for (int index = 0; index < model::MAX_NODES; index++) {
-					   if (!visited[index] && model::graph[minDist][index] && dist[minDist] != INT_MAX && dist[minDist] + model::graph[minDist][index] < dist[index]) {
-						   parent[index] = minDist;
-						   dist[index] = dist[minDist] + model::graph[minDist][index];
-					   }
-				   }
-			   }
+			shortestPathEdges->Clear();
+			parent->Clear();
 
-			   // After the algorithm runs, store the edges of the shortest path
-			   if (srcNode != destNode) {
-				   int current = destNode;
-				   while (current != srcNode) {
-					   int prev = parent[current];
-					   shortestPathEdges->Add(Tuple::Create(prev, current));
-
-					   current = prev;
-				   }
-				   shortestPathEdges->Reverse();
-			   }
-		   }
-
-		   // Helper Function for Dijkstras to find the vertex with the minimum distance value
-		   int minimumDistance(const std::vector<int>& dist, const std::vector<bool>& visited) {
-			   int min = INT_MAX, index = -1;
-
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   if (!visited[i] && dist[i] <= min) {
-					   min = dist[i];
-					   index = i;
-				   }
-			   }
-			   return index;
-		   }
-
-		   // Function to draw nodes
-		   void drawNode(int x, int y, int nodeID) {
-			   Graphics^ g = pic_nodeVisuals->CreateGraphics();
-			   g->FillEllipse(Brushes::LightBlue, x - radius, y - radius, 2 * radius, 2 * radius);
-
-			   // Draw nodeID within the node
-			   PointF point = PointF(x, y);
-			   g->DrawString(nodeID.ToString(), gcnew Drawing::Font("Arial Bold", 11), Brushes::Black, point);
-		   }
-
-		   // Function to draw edges
-		   void drawEdge(int x1, int y1, int x2, int y2, Color edgeColor, Color brushColor, float penWidth, int fontSize, int weight) {
-			   Pen^ pen = gcnew Pen(edgeColor);
-			   SolidBrush^ brush = gcnew SolidBrush(brushColor);
-			   pen->Width = penWidth;
-			   Graphics^ g = pic_nodeVisuals->CreateGraphics();
-			   g->DrawLine(pen, x1, y1, x2, y2);
-
-			   // Draw weight of edge
-			   PointF point = PointF((x1 + x2) / 2, (y1 + y2) / 2); // Calculates the halfway point between the nodes to write the weight for the edge
-			   g->DrawString(weight.ToString(), gcnew Drawing::Font("Arial", fontSize), brush, point); // Writes the weight of the edge at this point
-		   }
-
-		   // Function to draw the graph
-		   void drawGraph(const std::vector<std::vector<int>>& graph) {
-			   nodePositions = gcnew List<Point>(model::MAX_NODES);
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   int x = rand() % (pic_nodeVisuals->Width - 2 * radius) + radius;
-				   int y = rand() % (pic_nodeVisuals->Height - 2 * radius) + radius;
-				   nodePositions->Add(Point(x, y));
-				   drawNode(x, y, i);
-			   }
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   for (int j = 0; j < model::MAX_NODES; j++) {
-					   if (graph[i][j] > 0) {
-						   Color lineColor = Color::Black; // Default color is black
-						   Color textColor = Color::Red;
-						   float penWidth = 1.5;
-						   int fontSize = 10;
-						   drawEdge(nodePositions[i].X, nodePositions[i].Y, nodePositions[j].X, nodePositions[j].Y, lineColor, textColor, penWidth, fontSize, model::graph[i][j]);
-					   }
-				   }
-			   }
-		   }
-
-		   void selectSource(Point& clickLocation) {
-			   // Selects Source Node
-			   srcNode = searchNodePositionsForClickLocation(clickLocation);
-			   txt_messageOutput->AppendText("Source Node Selected: " + srcNode + "\r\n");
-		   }
-
-		   void selectDestination(Point& clickLocation) {
-			   // Selects Destination Node
-			   destNode = searchNodePositionsForClickLocation(clickLocation);
-			   txt_messageOutput->AppendText("Destination Node Selected: " + destNode + "\r\n");
-		   }
-
-		   int searchNodePositionsForClickLocation(Point% clickLocation) {
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   Point node(nodePositions[i].X, nodePositions[i].Y);
-
-				   // Assuming a circular node with a radius of 20 pixels
-				   if (clickLocation.X >= node.X - radius && clickLocation.X <= node.X + radius &&
-					   clickLocation.Y >= node.Y - radius && clickLocation.Y <= node.Y + radius) {
-					   // Click location is within the radius of the node, return the index
-					   // txt_messageOutput->AppendText("Selected Node: " + i + "\r\n"); // Debugging message
-					   return i;
-				   }
-			   }
-
-			   // Click location not found within any node
-			   // TODO: Error message if node not found within click radius
-			   return -1;
-		   }
-
-		   void updateVisualisation() {
-			   // TODO: Update visualisation after dijkstra's algorithm runs
-			   drawGraphWithShortestPath(model::graph, shortestPathEdges);
-			   txt_messageOutput->AppendText("Shortest path calculated." + "\r\n");
-			   txt_messageOutput->AppendText("Shortest path is:" + "\r\n");
-		   }
-
-		   void drawGraphWithShortestPath(const std::vector<std::vector<int>>& graph, List<Tuple<int, int>^>^ shortestPathEdges) {
-			   Graphics^ g = pic_nodeVisuals->CreateGraphics();
-
-			   // Draw Edges
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   for (int j = i + 1; j < model::MAX_NODES; j++) {  // Draw only one side of the symmetric graph
-					   if (graph[i][j]) {
-						   // Determine the color based on whether the edge belongs to the shortest path
-						   Color lineColor = Color::Black; // Default color is black
-						   Color textColor = Color::Red;
-						   float penWidth = 1.3;
-						   int fontSize = 10;
-						   String^ weightText = System::Convert::ToString(graph[i][j]);
-
-						   // Check if the current edge is in the shortest path
-						   for each (Tuple<int, int> ^ edge in shortestPathEdges) {
-							   if ((edge->Item1 == i && edge->Item2 == j) || (edge->Item1 == j && edge->Item2 == i)) {
-								   lineColor = Color::Green; // Change color to green if it's in the shortest path
-								   textColor = Color::Green;
-								   penWidth = 2.5;
-								   fontSize = 11;
-								   break; // No need to continue checking once found
-							   }
-						   }
-						   // TODO: Clear the page before reprinting because there are currently duplicate numbers in different colors
-						   // Draw edge with correct color and weight
-						   drawEdge(nodePositions[i].X, nodePositions[i].Y, nodePositions[j].X, nodePositions[j].Y, lineColor, textColor, penWidth, fontSize, graph[i][j]);
-					   }
-				   }
-			   }
-		   }
-
-		   void clearGraph() {
-			   // Clear the existing graph
-			   for (int i = 0; i < model::MAX_NODES; i++) {
-				   for (int j = 0; j < model::MAX_NODES; j++) {
-					   model::graph[i][j] = 0;
-					   model::graph[j][i] = model::graph[i][j]; // TODO: Check if this is required
-				   }
-			   }
-		   }
-
-		   void clearDisplay() {
-			   Graphics^ g = pic_nodeVisuals->CreateGraphics();
-			   g->Clear(pic_nodeVisuals->BackColor);
-		   }
-
-		   void resetVariables() {
-			   // Clear the graph for next running
-			   clearGraph();
-
-			   // Reset variables
-			   srcNode = -1;
-			   destNode = -1;
-
-			   //model::graph.clear(); // Clear outer vector
-			   //model::graph.shrink_to_fit(); // Release memory held
-
-			   //if (nodePositions != nullptr) delete nodePositions;
-			   shortestPathEdges->Clear();
-			   parent->Clear();
-
-			   currentMode = SelectionMode::None;
-		   }
-
-		   void saveGraphToFile(String^ filePath) {
-			   std::ofstream outFile(msclr::interop::marshal_as<std::string>(filePath));
-			   if (!outFile.is_open()) {
-				   txt_messageOutput->AppendText("Error: Unable to open file for writing.\r\n");
-				   return;
-			   }
-
-			   // Save number of nodes
-			   outFile << model::MAX_NODES << "\n";
-
-			   // Save node positions with their indices
-			   for (int i = 0; i < nodePositions->Count; i++) {
-				   Point node = nodePositions[i];
-				   outFile << i << " " << node.X << " " << node.Y << "\n";
-			   }
-
-			   // Save graph edges and weights
-			   for (int i = 0; i < model::MAX_NODES; ++i) {
-				   for (int j = i + 1; j < model::MAX_NODES; ++j) {
-					   if (model::graph[i][j] > 0) {
-						   outFile << i << " " << j << " " << model::graph[i][j] << "\n";
-					   }
-				   }
-			   }
-
-			   outFile.close();
-			   txt_messageOutput->AppendText("Graph saved successfully.\r\n");
-		   }
-
-		   void loadGraphFromFile(String^ filePath) {
-			   std::ifstream inFile(msclr::interop::marshal_as<std::string>(filePath));
-			   if (!inFile.is_open()) {
-				   txt_messageOutput->AppendText("Error: Unable to open file for reading.\r\n");
-				   return;
-			   }
-
-			   // Clear existing graph and node positions
-			   clearGraph();
-			   nodePositions->Clear();
-
-			   // Clear the screen
-			   clearDisplay();
-
-			   // Read number of nodes
-			   int numNodes;
-			   inFile >> numNodes;
-			   if (numNodes != model::MAX_NODES) {
-				   txt_messageOutput->AppendText("Error: Number of nodes in file does not match MAX_NODES.\r\n");
-				   return;
-			   }
-
-			   // Load node positions
-			   for (int i = 0; i < numNodes; i++) {
-				   int index, x, y;
-				   if (!(inFile >> index >> x >> y) || index != i) {
-					   txt_messageOutput->AppendText("Error: Invalid node data in file.\r\n");
-					   return;
-				   }
-				   nodePositions->Add(Point(x, y));
-				   drawNode(x, y, i);
-			   }
-
-			   // Load graph edges and weights
-			   int u, v, weight;
-			   while (inFile >> u >> v >> weight) {
-				   if (u < 0 || u >= numNodes || v < 0 || v >= numNodes) {
-					   txt_messageOutput->AppendText("Error: Invalid node index in file.\r\n");
-					   continue;
-				   }
-				   model::graph[u][v] = weight;
-				   model::graph[v][u] = weight; // For undirected graph
-
-				   // Draw the edge
-				   drawEdge(nodePositions[u].X, nodePositions[u].Y,
-					   nodePositions[v].X, nodePositions[v].Y,
-					   Color::Black, Color::Red, 1.5f, 10, weight);
-			   }
-
-			   inFile.close();
-
-			   // Reset selection variables
-			   srcNode = -1;
-			   destNode = -1;
-			   currentMode = SelectionMode::None;
-			   shortestPathEdges->Clear();
-
-			   txt_messageOutput->AppendText("Graph loaded successfully.\r\n");
-		   }
+			currentMode = SelectionMode::None;
+		}
 };
 }

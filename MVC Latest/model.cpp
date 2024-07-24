@@ -1,3 +1,3 @@
-#include "model.h"
+#include "Model.h"
 
-std::vector<std::vector<int>> model::graph(MAX_NODES, std::vector<int>(MAX_NODES));
+std::vector<std::vector<int>> Model::graph(MAX_NODES, std::vector<int>(MAX_NODES));

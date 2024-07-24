@@ -1,8 +1,8 @@
 #pragma once
-// model.h
+// Model.h
 #include <vector>
 
-class model {
+class Model {
 public:
 	static std::vector<std::vector<int>> graph;
 	static const int MAX_NODES = 50;
