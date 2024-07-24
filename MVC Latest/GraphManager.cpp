@@ -65,9 +65,11 @@ void GraphManager::LoadGraphFromFile(String^ filePath, List<Point>^ nodePosition
     DrawingHelper::ClearDisplay(g, control);
     int numNodes;
     inFile >> numNodes;
+
     if (numNodes != Model::MAX_NODES) {
         return;
     }
+
     for (int i = 0; i < numNodes; i++) {
         int index, x, y;
         if (!(inFile >> index >> x >> y) || index != i) {
@@ -76,6 +78,7 @@ void GraphManager::LoadGraphFromFile(String^ filePath, List<Point>^ nodePosition
         nodePositions->Add(Point(x, y));
         DrawingHelper::DrawNode(g, x, y, i);
     }
+
     int u, v, weight;
     while (inFile >> u >> v >> weight) {
         if (u < 0 || u >= numNodes || v < 0 || v >= numNodes) {

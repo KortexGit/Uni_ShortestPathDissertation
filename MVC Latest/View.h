@@ -9,11 +9,12 @@
 #include <iostream>
 #include <fstream>
 #include <utility>
-//#include <msclr/marshal_cppstd.h>
+
 
 #include "Model.h"
 #include "DrawingHelper.h"
 #include "GraphManager.h"
+#include "Dijkstra.h"
 
 namespace MVCLatest {
 
@@ -32,9 +33,6 @@ namespace MVCLatest {
 		SelectDestination
 	};
 
-	/// <summary>
-	/// Summary for View
-	/// </summary>
 	public ref class View : public Form
 	{
 	public:
@@ -44,9 +42,6 @@ namespace MVCLatest {
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		~View()
 		{
 			if (components)
@@ -101,7 +96,7 @@ namespace MVCLatest {
 			// 
 			// pic_nodeVisuals
 			// 
-			this->pic_nodeVisuals->BackColor = System::Drawing::SystemColors::ControlDark;
+			this->pic_nodeVisuals->BackColor = System::Drawing::SystemColors::ControlLight;
 			this->pic_nodeVisuals->Location = System::Drawing::Point(13, 14);
 			this->pic_nodeVisuals->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
 			this->pic_nodeVisuals->MinimumSize = System::Drawing::Size(796, 480);
@@ -231,8 +226,6 @@ namespace MVCLatest {
 #pragma endregion
 	private: 
 		SelectionMode currentMode = SelectionMode::None;
-		static List<Tuple<int, int>^>^ shortestPathEdges = gcnew List<Tuple<int, int>^>();
-		static List<int>^ parent = gcnew List<int>();
 
 		static int srcNode = -1;
 		static int destNode = -1;
@@ -249,8 +242,15 @@ namespace MVCLatest {
 			}
 		}
 
-		Void pic_nodeVisuals_MouseClick(Object^ sender, Windows::Forms::MouseEventArgs^ e) { // TODO: Update this to offer left click right click selecting of nodes
-			switch (currentMode) {
+		Void pic_nodeVisuals_MouseClick(Object^ sender, Windows::Forms::MouseEventArgs^ e) { // TODO: Update this to offer left click / right click selecting of nodes
+			if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+				selectSource(e->Location);
+			}
+			else if (e->Button == System::Windows::Forms::MouseButtons::Right) {
+				selectDestination(e->Location);
+			}
+
+			/*switch (currentMode) {
 			case SelectSource:
 				selectSource(e->Location);
 				break;
@@ -259,37 +259,30 @@ namespace MVCLatest {
 				break;
 			case None:
 				txt_messageOutput->AppendText("Error: Please select source node to begin" + "\r\n");
-			}
+			}*/
 		}
 
 		Void btn_selectSource_Click(Object^ sender, EventArgs^ e) {
-			currentMode = SelectSource;
-			btn_selectSource->Enabled = false;
-			btn_selectDestination->Enabled = true;
+			//currentMode = SelectSource;
 		}
 
 		Void btn_selectDestination_Click(Object^ sender, EventArgs^ e) {
-			currentMode = SelectDestination;
-			btn_selectDestination->Enabled = false;
-			btn_runAlgorithm->Enabled = true;
+			//currentMode = SelectDestination;
 		}
 
 		Void btn_runAlgorithm_Click(Object^ sender, EventArgs^ e) {
 			// Check srcNode and destNode not equal to -1 (uninitialised) and then run algorithm
 			if (srcNode != -1 && destNode != -1) {
-				dijkstra(Model::graph, srcNode, destNode);
-				txt_messageOutput->AppendText("Successfully ran dijkstra's" + "\r\n");
+				Dijkstra::dijkstra(Model::graph, srcNode, destNode, Model::shortestPathEdges);
+				txt_messageOutput->AppendText("Algorithm finished" + "\r\n");
 				updateVisualisation();
-				//clearVariables();
 			}
 			else {
-				txt_messageOutput->AppendText("Error: Failed to run dijkstra's. Please select source node or destination node first" + "\r\n");
-				txt_messageOutput->AppendText("Selected Source Node: " + srcNode + "\r\n");
-				txt_messageOutput->AppendText("Selected Destination Node: " + destNode + "\r\n");
+				txt_messageOutput->AppendText("Error: Failed to run dijkstra's. Please select a valid source node and destination nodes." + "\r\n");
 			}
 		}
 
-		Void btn_saveGraph_Click(System::Object^ sender, System::EventArgs^ e) {
+		Void btn_saveGraph_Click(System::Object^ sender, System::EventArgs^ e) { // TODO: Add null graph checks before saving
 			SaveFileDialog^ saveFileDialog = gcnew SaveFileDialog();
 			saveFileDialog->Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 			saveFileDialog->FilterIndex = 1;
@@ -300,7 +293,7 @@ namespace MVCLatest {
 			}
 		}
 
-		Void btn_loadGraph_Click(System::Object^ sender, System::EventArgs^ e) {
+		Void btn_loadGraph_Click(System::Object^ sender, System::EventArgs^ e) { // TODO: Add null file checks before loading into the graph
 			OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
 			openFileDialog->Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 			openFileDialog->FilterIndex = 1;
@@ -311,61 +304,27 @@ namespace MVCLatest {
 			}
 		}
 
-		// Dijkstra's algorithm
-		void dijkstra(const std::vector<std::vector<int>>& graph, int srcNode, int destNode) {
-			std::vector<int> dist(Model::MAX_NODES, INT_MAX);  // The output array. dist[i] will hold the shortest distance from src to i
-			std::vector<bool> visited(Model::MAX_NODES, false); // Visited[i] will be true if vertex i is included in shortest path tree or shortest distance from src to i is finalised.
-			std::vector<int> parent(Model::MAX_NODES, -1); // Parent array to store shortest path tree
-
-			dist[srcNode] = 0;
-
-			for (int loop = 0; loop < Model::MAX_NODES; loop++) {
-				int minDist = minimumDistance(dist, visited);
-				visited[minDist] = true;
-				for (int index = 0; index < Model::MAX_NODES; index++) {
-					if (!visited[index] && Model::graph[minDist][index] && dist[minDist] != INT_MAX && dist[minDist] + Model::graph[minDist][index] < dist[index]) {
-						parent[index] = minDist;
-						dist[index] = dist[minDist] + Model::graph[minDist][index];
-					}
-				}
-			}
-
-			// After the algorithm runs, store the edges of the shortest path
-			if (srcNode != destNode) {
-				int current = destNode;
-				while (current != srcNode) {
-					int prev = parent[current];
-					shortestPathEdges->Add(Tuple::Create(prev, current));
-
-					current = prev;
-				}
-				shortestPathEdges->Reverse();
-			}
-		}
-
-		// Helper Function for Dijkstras to find the vertex with the minimum distance value
-		int minimumDistance(const std::vector<int>& dist, const std::vector<bool>& visited) {
-			int min = INT_MAX, index = -1;
-
-			for (int i = 0; i < Model::MAX_NODES; i++) {
-				if (!visited[i] && dist[i] <= min) {
-					min = dist[i];
-					index = i;
-				}
-			}
-			return index;
-		}
-
 		void selectSource(Point& clickLocation) {
 			// Selects Source Node
 			srcNode = searchNodePositionsForClickLocation(clickLocation);
-			txt_messageOutput->AppendText("Source Node Selected: " + srcNode + "\r\n");
+			if (srcNode != -1) {
+				txt_messageOutput->AppendText("Source Node Selected: " + srcNode + "\r\n");
+			}
+			else {
+				return;
+			}
+			
 		}
 
 		void selectDestination(Point& clickLocation) {
 			// Selects Destination Node
 			destNode = searchNodePositionsForClickLocation(clickLocation);
-			txt_messageOutput->AppendText("Destination Node Selected: " + destNode + "\r\n");
+			if (destNode != -1) {
+				txt_messageOutput->AppendText("Destination Node Selected: " + destNode + "\r\n");
+			}
+			else {
+				return;
+			}
 		}
 
 		int searchNodePositionsForClickLocation(Point% clickLocation) {
@@ -376,24 +335,34 @@ namespace MVCLatest {
 				if (clickLocation.X >= node.X - DrawingHelper::radius && clickLocation.X <= node.X + DrawingHelper::radius &&
 					clickLocation.Y >= node.Y - DrawingHelper::radius && clickLocation.Y <= node.Y + DrawingHelper::radius) {
 					// Click location is within the radius of the node, return the index
-					// txt_messageOutput->AppendText("Selected Node: " + i + "\r\n"); // Debugging message
 					return i;
 				}
 			}
 
-			// Click location not found within any node
-			// TODO: Error message if node not found within click radius
+			// If no valid node is found, display the error message
+			txt_messageOutput->AppendText("Error: Please click on a node to select it." + "\r\n");
 			return -1;
 		}
 
 		void updateVisualisation() {
-			// TODO: Update visualisation after dijkstra's algorithm runs
-			drawGraphWithShortestPath(Model::graph, shortestPathEdges);
+			// Create a bitmap for double buffering
+			Bitmap^ buffer = gcnew Bitmap(pic_nodeVisuals->Width, pic_nodeVisuals->Height);
+			Graphics^ g = Graphics::FromImage(buffer);
+
+			// Clear the graphics
+			g->Clear(pic_nodeVisuals->BackColor);
+
+			// Draw the graph with the shortest path
+			drawGraphWithShortestPath(Model::graph, g);
+
+			// Draw the bitmap on the picture box
+			pic_nodeVisuals->Image = buffer;
+
 			txt_messageOutput->AppendText("Shortest path calculated." + "\r\n");
 			txt_messageOutput->AppendText("Shortest path is:" + "\r\n");
 		}
 
-		void drawGraphWithShortestPath(const std::vector<std::vector<int>>& graph, List<Tuple<int, int>^>^ shortestPathEdges) {
+		void drawGraphWithShortestPath(const std::vector<std::vector<int>>& graph, Graphics^ g) {
 			// Draw Edges
 			for (int i = 0; i < Model::MAX_NODES; i++) {
 				for (int j = i + 1; j < Model::MAX_NODES; j++) {  // Draw only one side of the symmetric graph
@@ -406,18 +375,25 @@ namespace MVCLatest {
 						String^ weightText = System::Convert::ToString(graph[i][j]);
 
 						// Check if the current edge is in the shortest path
-						for each (Tuple<int, int> ^ edge in shortestPathEdges) {
-							if ((edge->Item1 == i && edge->Item2 == j) || (edge->Item1 == j && edge->Item2 == i)) {
+						for (const auto& edge : Model::shortestPathEdges) {
+							if ((edge.first == i && edge.second == j) || (edge.first == j && edge.second == i)) {
 								lineColor = Color::Green; // Change color to green if it's in the shortest path
 								textColor = Color::Green;
 								penWidth = 2.5;
-								fontSize = 11;
+								fontSize = 12;
 								break; // No need to continue checking once found
 							}
 						}
-						// TODO: Clear the page before reprinting because there are currently duplicate numbers in different colors
+
 						// Draw edge with correct color and weight
-						DrawingHelper::DrawEdge(pic_nodeVisuals->CreateGraphics(), GraphManager::GetNodePositionIndex(i).X, GraphManager::GetNodePositionIndex(i).Y, GraphManager::GetNodePositionIndex(j).X, GraphManager::GetNodePositionIndex(j).Y, lineColor, textColor, penWidth, fontSize, graph[i][j]);
+						DrawingHelper::DrawEdge(g, GraphManager::GetNodePositionIndex(i).X, GraphManager::GetNodePositionIndex(i).Y, GraphManager::GetNodePositionIndex(j).X, GraphManager::GetNodePositionIndex(j).Y, lineColor, textColor, penWidth, fontSize, graph[i][j]);
+
+						// Draw Nodes
+						if (GraphManager::GetNodePositions() != nullptr) {
+							for (int i = 0; i < Model::MAX_NODES; i++) {
+								DrawingHelper::DrawNode(g, GraphManager::GetNodePositionIndex(i).X, GraphManager::GetNodePositionIndex(i).Y, i);
+							}
+						}
 					}
 				}
 			}
@@ -430,9 +406,6 @@ namespace MVCLatest {
 			// Reset variables
 			srcNode = -1;
 			destNode = -1;
-
-			shortestPathEdges->Clear();
-			parent->Clear();
 
 			currentMode = SelectionMode::None;
 		}

@@ -170,12 +170,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="DrawingHelper.cpp" />
     <ClCompile Include="GraphManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="View.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="DrawingHelper.h" />
     <ClInclude Include="GraphManager.h" />
     <ClInclude Include="Model.h" />

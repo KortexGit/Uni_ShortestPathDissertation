@@ -22,5 +22,5 @@ public:
     static Point GetNodePositionIndex(int index);
 
 private:
-    static List<Point>^ GraphManager::nodePositions = nullptr;
+    static List<Point>^ GraphManager::nodePositions = nullptr; // TODO: Make this a vector of points?
 };
